@@ -239,3 +239,15 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+
+
+(use-package! org-download
+  :after org
+  :config
+  ;; Enable in org buffers
+  (add-hook 'org-mode-hook #'org-download-enable)
+
+  ;; Enable in dired for drag & droppp
+  (add-hook 'dired-mode-hook #'org-download-enable)
+  (setq-default org-download-image-dir "~/org/images"))
