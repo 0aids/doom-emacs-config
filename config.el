@@ -78,9 +78,12 @@
 
 ;; Scan all org files in the org directory (including roam/ and all subdirs)
 (setq org-agenda-files
-      (seq-filter (lambda (file)
-                    (string-match-p "\\.org$" file))
-                  (directory-files-recursively org-directory "\\.org$")))
+      (directory-files-recursively
+       org-directory
+       "\\.org$"
+       nil
+       (lambda (dir)
+         (not (string-prefix-p "." (file-name-nondirectory dir))))))
 
 
 ;; Agenda view settings - show 14 days (2 weeks) by default
