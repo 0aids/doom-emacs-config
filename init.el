@@ -181,7 +181,7 @@
        ;;yaml              ; JSON, but readable
        ;;zig               ; C, but simpler
 
-       :email
+       ;;:email
        ;;(mu4e +org +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
