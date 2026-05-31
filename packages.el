@@ -53,9 +53,8 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 
-(package! org-download)
-;; (package! org-fragtog)
 
+;; CONFIG BEGINS HERE
 (package! org :recipe
   (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
    (:host nil :repo "https://git.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
@@ -82,4 +81,4 @@
 
 (unpin! org)
 (package! org-modern)
-;; (package! org-super-agenda)
+(package! org-download)
