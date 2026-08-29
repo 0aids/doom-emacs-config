@@ -21,7 +21,7 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "Iosevka Nerd Font Propo" :size 12 :weight 'semi-light)
+(setq doom-font (font-spec :family "Iosevka Nerd Font Propo" :size 13 :weight 'semi-light)
       doom-variable-pitch-font (font-spec :family "Libertinus Serif" :size 13))
 (setq doom-big-font (font-spec :family "Libertinus Serif"))
 ;;
@@ -37,6 +37,13 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
+
+;; Snippet here to ensure that pdf-view-mode turns off line numbers (incompatible)
+(require 'display-line-numbers)
+(defun display-line-numbers--turn-on ()
+  "Turn on `display-line-numbers-mode'."
+  (unless (or (minibufferp) (eq major-mode 'pdf-view-mode))
+    (display-line-numbers-mode)))
 (setq display-line-numbers-type 'visual)
 (global-display-line-numbers-mode 1)
 
@@ -81,6 +88,14 @@
          :target (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d %A>\n\n* Today\n\n* Tmrw\n\n* Later\n")
          :empty-lines 1)))
+(after! org
+  (setq org-todo-keywords '((sequence "TODO" "DOIN" "PAUS" "|" "DONE" "NOPE")))
+  (setq org-todo-keyword-faces
+        '(("DOIN" . (:inherit (bold org-todo) :foreground "orange"))
+          ("NOPE" . (:inherit (bold org-todo) :foreground "black" :weight "bold"))
+          ("DONE" . (:inherit (bold org-done)))
+          ("PAUS" . (:inherit (bold org-done) :foreground "white" :weight "bold"))
+          )))
 
 ;; Configure org-roam capture - new nodes go to roam/${slug}.org
 (setq org-roam-capture-templates
@@ -96,8 +111,8 @@
   :hook (org-mode . visual-fill-column-mode)
   :config
   (setq-default visual-fill-column-width 100)
-  (setq-default visual-fill-column-center-text nil)
-  )
+  (setq-default visual-fill-column-center-text nil))
+
 ;; code for centering LaTeX previews -- a terrible idea
 (use-package org-latex-preview
   :config
@@ -132,7 +147,17 @@
       (remove-hook 'org-latex-preview-overlay-update-functions
                    #'my/org-latex-preview-center)
       (remove-hook 'org-latex-preview-overlay-open-functions
-                   #'my/org-latex-preview-uncenter))))
+                   #'my/org-latex-preview-uncenter)))
+  (add-hook 'org-mode-hook 'org-latex-preview-mode)
+  (add-hook 'org-mode-hook 'org-latex-preview-center-mode))
+
+;; Turn off pretty entities for latex, it becomes annoying when typing
+(setq org-pretty-entities nil)
+
+(use-package org-download
+  :config
+  (add-hook 'org-mode-hook 'org-download-enable))
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
 ;; settings. E.g.

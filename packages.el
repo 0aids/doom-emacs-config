@@ -82,3 +82,8 @@
 (unpin! org)
 (package! org-modern)
 (package! org-download)
+
+(package! lean4-mode
+  :recipe (:host github
+           :repo "leanprover-community/lean4-mode"
+           :files ("*.el" "data")))
